@@ -4,18 +4,12 @@ const express = require("express");
 const app = express();
 
 // specify the port that your server will run on
-const HTTP_PORT = process.env.PORT || 8081;
-
- 
+const HTTP_PORT = process.env.PORT || 8083;
 // import the Schema class
 const Schema = mongoose.Schema;
 
-// 1. connect to your mongo database
-// -confirm that connection succuessed
-
-
 // url of your database
-const mongoURL = "mongodb+srv://Person:Portcredit1@cluster0.plb1r.mongodb.net/college?retryWrites=true&w=majority"
+const mongoURL = "mongodb+srv://Person:Portcredit1@cluster0.plb1r.mongodb.net/Luck?retryWrites=true&w=majority"
 
 // configuration options to use when connecting to the database
 const connectionOptions = {useNewUrlParser: true, useUnifiedTopology: true}
@@ -36,6 +30,8 @@ mongoose.connect(mongoURL, connectionOptions).then(
     }
 )
 
+
+
 /// START SERVER
 // start the server and output a message if the server started successfully
 const onHttpStart = () => {
@@ -49,90 +45,109 @@ app.get("/", (req, res) => {
     res.send("Hi");
    });
 
-
-// 2. define the Student table
-// Define the table, Table schemas 
-const StudentSchema = new Schema({
+ 
+// Create scehme for table
+// Define the table
+const ItemsSchema = new Schema({
     name:String,
+    rarity:String,
+    description:String,
+    goldPerTurn:Number
  })
  
  // Create the table and return the schema as a Mongoose model
-const Student = mongoose.model("students_table", StudentSchema)
+ const Items = mongoose.model("items_table", ItemsSchema)
+
+// Endpoints
+/*
+const s3 = new Items({"name": "Kelly", "rarity": "common", "description": "LOL", "goldPerTurn":4})
+const s2 = new Items({"name": "Belly", "rarity": "zommon", "description": "LOL1", "goldPerTurn":0})
+s3.save()
+s2.save()
+*/
+
+/* GET ALL
+   Endpoint: /api/items
+   Request Type:  GET
+   Return: JSON Array of all items in database
+*/
 
 
-/* Inserting 
-// 3. insert data into the table
-const s1 = new Student({"name": "Kelly"})
-const s2 = new Student({"name": "Bob"})
-const s3 = new Student({"name": "Kevin"})
-const s4 = new Student({"name": "Caitlyn"})
+/*
+    Items.find().exec().then(
+        (results) =>
+        {
+            if(results.length === 0)
+            {
+                console.log("No results found")
+            }
+            else
+            {    
+                console.log(results)
+            }
+        }
+    ).catch(
+        (error) => {
+            console.log("Error")
+        }
+    ) 
 
-// insert many students
-Student.create([s1,s2,s3,s4]).then(
-    () => 
-    {
-        console.log("Insert with create successful")
-    }
+*/
+
+/* GET ONE 
+   Endpoint: /api/items:item_name
+   Request Type:  GET
+   Return: JSON Array of item with specific name
+*/
+
+/*
+    Items.find({name:"Belly"}).exec().then(
+        (results) =>
+        {
+            if(results.length === 0)
+            {
+                console.log("No results found")
+            }
+            else
+            {    
+                console.log(results)
+            }
+        }
+    ).catch(
+        (error) => {
+            console.log("Error")
+        }
+    ) 
+*/
+
+/* INSERT ONE
+   Endpoint: /api/items
+   Request Type:  POST
+   Return: Insert item, item name and rarity must. Description and gold per turn optional
+*/
+
+
+ 
+/*
+const s01 = new Items({"name": "Bob", "rarity": "common", "description": "POL", "goldPerTurn":1})
+s01.save().then(
+    console.log("Inserted")
 ).catch(
-    (err) =>
-    {
-        console.log("Error inserting with create into table.")
-        console.log(err)
+    (error) => {
+        console.log("error")
+        console.log(error)
     }
 )
+ */ 
+
+/* DELETE AN ITEM BY NAME
+   Endpoint: /api/items:item_name
+   Request Type:  DELETE
+   Return: Delete an item by name
 */
 
-
-
-// SEARCH
-// student named Lurara:  {name:"Lurara"}
 /*
-Student.find({name:"Bobz"}).exec().then(
-     // 1. database was able to find matching student 
-    // 2. the database was NOT able to find the student
-    (results) => 
-    {
-        if(results.length === 0)
-        {
-            console.log("No results found")
-        }
-        else
-        {    
-            console.log(results)
-        }
-    }).catch(
-    (err) => {
-        // IF problem with the query
-        console.log(err) 
-    }
-)
-*/
-
-// UPDATE 
-/*
-Student.findOneAndUpdate({name:"Kevin"}, {name:"Emily"}, {new:true}).exec().then(
-    (updatedStudent) =>
-    {
-        if(updatedStudent === null)
-        {
-            console.log("Could not find the student to update")
-        }
-        else
-        {
-         console.log(updatedStudent)
-        }
-    }
-).catch(
-    (err) => {
-        console.log(err)
-    }
-)
-*/
-
-// Delete 
-/*
-// delete by id
-Student.findByIdAndDelete("60652d5e5f2a591041d04bd2").exec().then(
+Items.deleteOne({name: "Bob"}).exec().then(
     (deletedStudent) => 
     {
         if(deletedStudent == null)
@@ -151,16 +166,19 @@ Student.findByIdAndDelete("60652d5e5f2a591041d04bd2").exec().then(
     }
 )
 
-// delete all
-Student.deleteMany({}).exec().then(
-    (result) => 
-    {
-        console.log("Deleted all Data. Whoops.")
-    }
-).catch(
-    (err) => 
-    {
-        console.log(err)
-    }
-)
 */
+
+/*  UPDATE BY ID
+   Endpoint: /api/items:item_id
+   Request Type:  PUT
+   Return: Error code 404
+*/
+
+/*
+
+*/
+
+   
+
+
+
