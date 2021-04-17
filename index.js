@@ -40,11 +40,6 @@ const onHttpStart = () => {
    app.listen(HTTP_PORT, onHttpStart);
 
 
-// list of url endpoints that your server will respond to
-app.get("/", (req, res) => {
-    res.send("Hi");
-   });
-
  
 // Create scehme for table
 // Define the table
@@ -73,26 +68,31 @@ s2.save()
 */
 
 
-/*
+app.get("/api/items", (req, res) =>
+{
     Items.find().exec().then(
         (results) =>
         {
             if(results.length === 0)
             {
                 console.log("No results found")
+                res.send("No Results found")
             }
             else
             {    
                 console.log(results)
+                res.send(results)
             }
         }
     ).catch(
         (error) => {
-            console.log("Error")
+            console.log(error)
         }
     ) 
+})
 
-*/
+
+
 
 /* GET ONE 
    Endpoint: /api/items:item_name
@@ -100,8 +100,9 @@ s2.save()
    Return: JSON Array of item with specific name
 */
 
-/*
-    Items.find({name:"Belly"}).exec().then(
+app.get("/api/items/:item_name", (req, res) =>{
+
+    Items.findOne({name:req.params.item_name}).exec().then(
         (results) =>
         {
             if(results.length === 0)
@@ -110,15 +111,16 @@ s2.save()
             }
             else
             {    
-                console.log(results)
+                res.send(results)
             }
         }
     ).catch(
         (error) => {
-            console.log("Error")
+            console.log("SHT")
         }
-    ) 
-*/
+    )
+
+})
 
 /* INSERT ONE
    Endpoint: /api/items
